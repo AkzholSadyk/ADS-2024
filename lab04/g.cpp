@@ -1,75 +1,58 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Node {
-public:
-    int value;
-    Node* left;
-    Node* right;
-
-    Node(int val) {
-        value = val;
-        left = nullptr;
-        right = nullptr;
+int count1543(const vector<string>& layer) {
+    string target = "1543";
+    int count = 0;
+    string s = "";
+    for (const auto& row : layer) {
+        s += row;
     }
-};
-
-class BST {
-public:
-    Node* root;
-
-    BST() {
-        root = nullptr;
-    }
-
-    void insert(int val) {
-        root = insertRec(root, val);
-    }
-
-    Node* insertRec(Node* node, int val) {
-        if (node == nullptr) {
-            return new Node(val);
+    for (size_t i = 0; i <= s.size() - 4; ++i) {
+        if (s.substr(i, 4) == target) {
+            count++;
         }
-        if (val < node->value) {
-            node->left = insertRec(node->left, val);
-        } else if (val > node->value) {
-            node->right = insertRec(node->right, val);
-        }
-        return node;
     }
+    return count;
+}
 
-    int diameter() {
-        int diameter = 0;
-        height(root, diameter);
-        return diameter;
+vector<string> extractLayer(const vector<string>& carpet, int layer) {
+    int n = carpet.size();
+    int m = carpet[0].size();
+    vector<string> result;
+    for (int i = layer; i < m - layer; ++i) {
+        result.push_back(string(1, carpet[layer][i]));
     }
-
-private:
-    int height(Node* node, int& diameter) {
-        if (node == nullptr) {
-            return 0;
-        }
-
-        int leftHeight = height(node->left, diameter);
-        int rightHeight = height(node->right, diameter);
-
-        diameter = max(diameter, leftHeight + rightHeight);
-
-        return 1 + max(leftHeight, rightHeight);
+    for (int i = layer + 1; i < n - layer; ++i) {
+        result.push_back(string(1, carpet[i][m - layer - 1]));
     }
-};
+    for (int i = m - layer - 2; i >= layer; --i) {
+        result.push_back(string(1, carpet[n - layer - 1][i]));
+    }
+    for (int i = n - layer - 2; i > layer; --i) {
+        result.push_back(string(1, carpet[i][layer]));
+    }
+    return result;
+}
 
 int main() {
-    int n;
-    cin >> n;
-    BST tree;
-    for (int i = 0; i < n; ++i) {
-        int val;
-        cin >> val;
-        tree.insert(val);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> carpet(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> carpet[i];
+        }
+        
+        int totalCount = 0;
+        for (int layer = 0; layer < min(n, m) / 2; ++layer) {
+            vector<string> currentLayer = extractLayer(carpet, layer);
+            totalCount += count1543(currentLayer);
+        }
+        
+        cout << totalCount << endl;
     }
-
-    cout << tree.diameter()+1 << endl;
-
     return 0;
 }
