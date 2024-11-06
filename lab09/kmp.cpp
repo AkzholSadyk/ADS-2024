@@ -24,7 +24,7 @@ void computeLPSArray(string pattern, int M, vector<int>& lps) {
 }
 
 // KMP algorithm for pattern matching
-int KMPSearch(string pattern, string text) {
+void KMPSearch(string pattern, string text, int c) {
     int M = pattern.length();
     int N = text.length();
     vector<int> lps(M);
@@ -51,14 +51,21 @@ int KMPSearch(string pattern, string text) {
             }
         }
     }
-    return count;
+    // cout << count << endl;
+    if(c <= count){
+        cout <<"YES"; 
+    }
+    else{
+        cout << "NO";
+    }
 }
 
 int main() {
-   
-    string text;cin >> text;
-    int c;cin >> c;
     string pattern;cin >> pattern;
+    int c;cin >> c;
+    string text;cin >> text;
+    
+    
 
     // if(a.size()>b.size()){
     //     text = a;
@@ -68,14 +75,13 @@ int main() {
     //     text = b;
     //     pattern = a;
     // }
-    cout << KMPSearch(pattern, text) << endl;
-    if(c <= KMPSearch(pattern, text)){
-        cout <<"YES"; 
-    }
-    else{
-        cout << "NO";
-    }
+    KMPSearch(pattern, text, c);
+    // if(c <= KMPSearch(pattern, text)){
+    //     cout <<"YES"; 
+    // }
+    // else{
+    //     cout << "NO";
+    // }
     
     return 0;
 }
-
