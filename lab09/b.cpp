@@ -1,8 +1,7 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-// Function to create the longest prefix suffix (LPS) array
+
 void computeLPSArray(string pattern, int M, vector<int>& lps) {
     int length = 0;
     lps[0] = 0;
@@ -23,17 +22,17 @@ void computeLPSArray(string pattern, int M, vector<int>& lps) {
     }
 }
 
-// KMP algorithm for pattern matching
+
 void KMPSearch(string pattern, string text, int c) {
     int M = pattern.length();
     int N = text.length();
     vector<int> lps(M);
 
-    // Preprocess the pattern (calculate lps array)
+    
     computeLPSArray(pattern, M, lps);
     int count =0;
-    int i = 0; // index for text
-    int j = 0; // index for pattern
+    int i = 0;
+    int j = 0; 
     while (i < N) {
         if (pattern[j] == text[i]) {
             i++;
@@ -51,7 +50,7 @@ void KMPSearch(string pattern, string text, int c) {
             }
         }
     }
-    // cout << count << endl;
+  
     if(c <= count){
         cout <<"YES"; 
     }
@@ -65,23 +64,7 @@ int main() {
     int c;cin >> c;
     string text;cin >> text;
     
-    
-
-    // if(a.size()>b.size()){
-    //     text = a;
-    //     pattern = b;
-    // }
-    // else{
-    //     text = b;
-    //     pattern = a;
-    // }
     KMPSearch(pattern, text, c);
-    // if(c <= KMPSearch(pattern, text)){
-    //     cout <<"YES"; 
-    // }
-    // else{
-    //     cout << "NO";
-    // }
-    
+
     return 0;
 }
