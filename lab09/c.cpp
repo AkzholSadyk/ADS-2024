@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
+// Function to create the longest prefix suffix (LPS) array
 void computeLPSArray(string pattern, int M, vector<int>& lps) {
     int length = 0;
     lps[0] = 0;
@@ -22,16 +22,17 @@ void computeLPSArray(string pattern, int M, vector<int>& lps) {
     }
 }
 
+// KMP algorithm for pattern matching
 void KMPSearch(string pattern, string text) {
     int M = pattern.length();
     int N = text.length();
     vector<int> lps(M);
-    int count = 0;
-    deque<int> ako;
+
+    // Preprocess the pattern (calculate lps array)
     computeLPSArray(pattern, M, lps);
 
-    int i = 0; 
-    int j = 0; 
+    int i = 0; // index for text
+    int j = 0; // index for pattern
     while (i < N) {
         if (pattern[j] == text[i]) {
             i++;
@@ -39,8 +40,8 @@ void KMPSearch(string pattern, string text) {
         }
 
         if (j == M) {
-            ako.push_back(i - j+1);
-            count++;
+            cout<< i << endl;
+            break;
             j = lps[j - 1];
         } else if (i < N && pattern[j] != text[i]) {
             if (j != 0) {
@@ -50,24 +51,13 @@ void KMPSearch(string pattern, string text) {
             }
         }
     }
-    cout << count << endl;
-    for(int i=0;i<ako.size();i++){
-        cout << ako[i] << " ";
-    }
 }
 
 int main() {
-    string a,b;cin >> a >> b;
-    string text;
-    string pattern;
-    if(a.size()>b.size()){
-        text = a;
-        pattern = b;
-    }
-    else{
-        text = b;
-        pattern = a;
-    }
+    string text;cin >> text;
+    string pattern;cin >> pattern;
+    
+    
     
 
     KMPSearch(pattern, text);
