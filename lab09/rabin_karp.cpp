@@ -1,98 +1,41 @@
-// #include <bits/stdc++.h>
-
-// using namespace std;
-
-
-
-// int hash_rolling(string s, int p) {
-//     int h = 0;
-//     int pow = 1;
-//     for (int i = s.length() - 1; i >= 0; i--) {
-//         h = (h + (int)s.at(i) * pow) % p;
-//         pow = (pow * p) % p;
-//     }
-//     return h;
-// }
-
-// vector<int> rabin_karp(string text, string pattern, int p) {
-//     int n = text.length();
-//     int m = pattern.length();
-
-//     vector<int> positions;
-
-//     int target_hash = hash_rolling(pattern, p);
-
-//     int hash_i = 0;
-//     int pow = 1;
-//     int pow_store;
-
-//     for (int i = m - 1; i >= 0; i--) {
-//         pow_store = pow;
-//         hash_i = (hash_i + (int)text.at(i) * pow) % p;
-//         pow = (pow * p) % p;
-//     }
-    
-//     if (hash_i == target_hash && text.substr(0, m) == pattern) {
-//         positions.push_back(0);
-//     }
-
-//     for (int i = 1; i <= n - m; i++) {
-//         hash_i = (((hash_i - ((int)text.at(i - 1)%p)) * pow_store) * 128 % p + text.at(i + m - 1)) % p;
-//         if (hash_i == target_hash) {
-//             if (text.substr(i, m) == pattern)
-//                 positions.push_back(i);
-//         }
-//     }
-
-//     return positions;
-// }
-
-
-
-// int main() {
-//     int p = 5003;
-//     string s = "this is a large string";
-//     string pattern = "string";
-
-//     vector<int> v1 = rabin_karp(s, pattern, p);
-//     for (int x : v1) {
-//         cout << x << " "; // Correct : 16
-//     }
-//     cout << endl;
-//     vector<int> v2 = rabin_karp(s, "larg", p);
-//     for (int x : v2) {
-//         cout << x << " "; // Correct : 10
-//     }
-// }
-
-
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 using namespace std;
-
 int main() {
-    string previousCity;
-    cin >> previousCity;
+    std::string city;
     int n;
+
+    // Read the input city name
+    cin >> city;
+
+    // Read the number of cities
     cin >> n;
-    vector<string> cities(n);
-    for (int i = 0; i < n; i++) {
-        cin >> cities[i];
+
+    std::vector<std::string> cities(n);
+    
+    // Read the cities into the vector
+    for (int i = 0; i < n; ++i) {
+        std::cin >> cities[i];
     }
 
-    char lastChar = previousCity.back();
-    vector<string> possibleCities;
-    for (const string& city : cities) {
-        if (city.front() == lastChar) {
-            possibleCities.push_back(city);
+    std::vector<std::string> greaterCities;
+
+    // Find cities that are lexicographically greater than the input city
+    for (const auto& c : cities) {
+        if (c > city) {
+            greaterCities.push_back(c);
         }
     }
 
-    cout << possibleCities.size() << endl;
-    for (const string& city : possibleCities) {
-        cout << city << endl;
+    // Output the number of cities greater than the input city
+    std::cout << greaterCities.size() << std::endl;
+
+    // Output each greater city
+    for (const auto& gCity : greaterCities) {
+        std::cout << gCity << std::endl;
     }
 
     return 0;
-}
+}    

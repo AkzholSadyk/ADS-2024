@@ -1,81 +1,42 @@
-#include <iostream>
-#include <vector>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
 
-// Функция для создания массива LPS (Longest Prefix Suffix)
-void computeLPSArray(string pattern, int M, vector<int>& lps) {
-    int length = 0;
-    lps[0] = 0;
-    int i = 1;
-    while (i < M) {
-        if (pattern[i] == pattern[length]) {
-            length++;
-            lps[i] = length;
-            i++;
-        } else {
-            if (length != 0) {
-                length = lps[length - 1];
-            } else {
-                lps[i] = 0;
-                i++;
-            }
-        }
+vector <int> prefix;
+
+vector <int> getPref(string s){
+    prefix.resize(s.size());
+    for(int i = 1; i < s.size(); i++){
+        int j = prefix[i - 1];
+        while(j > 0 && s[i] != s[j]) j = prefix[j - 1];
+        if(s[i] == s[j]) j++;
+        prefix[i] = j;
     }
+    return prefix;
 }
 
-// Функция для поиска максимального суффикса, который является префиксом
-int findMaxSuffixPrefix(string text, string pattern) {
-    int M = pattern.length();
-    int N = text.length();
-    vector<int> lps(M);
-    computeLPSArray(pattern, M, lps);
-    int i = 0, j = 0;
-    while (i < N) {
-        if (pattern[j] == text[i]) {
-            i++;
-            j++;
-        }
-        if (j == M) {
-            return j;
-        } else if (i < N && pattern[j] != text[i]) {
-            if (j != 0) {
-                j = lps[j - 1];
-            } else {
-                i++;
-            }
+int main(){
+    string s; cin >> s;
+    s[0] = tolower(s[0]);
+    int n, maxpref = 0; cin >> n;
+    vector <pair<string, int> > strandpref;  
+    for(int i = 0; i < n; i++){
+        string str; cin >> str;
+        str[0] = tolower(str[0]);
+        string join = str + s;
+        vector <int> pref = getPref(join);
+        maxpref = max(maxpref, pref.back());
+        strandpref.push_back({str, pref.back()});
+    }
+    vector <string> result;
+    for(auto i : strandpref){
+        if(i.second == maxpref && maxpref != 0){
+            result.push_back(i.first);
         }
     }
-    return j;
-}
-
-int main() {
-    string previousCity;
-    cin >> previousCity;
-    int n;
-    cin >> n;
-    vector<string> cities(n);
-    for (int i = 0; i < n; i++) {
-        cin >> cities[i];
+    cout << result.size() << "\n";
+    for(int i = 0; i < result.size(); i++){
+        result[i][0] = toupper(result[i][0]);
+        cout << result[i] << "\n";
     }
-
-    vector<string> possibleCities;
-    int maxLength = 0;
-    for (const string& city : cities) {
-        int length = findMaxSuffixPrefix(previousCity, city);
-        if (length > maxLength) {
-            maxLength = length;
-            possibleCities.clear();
-            possibleCities.push_back(city);
-        } else if (length == maxLength) {
-            possibleCities.push_back(city);
-        }
-    }
-
-    cout << possibleCities.size() << endl;
-    for (const string& city : possibleCities) {
-        cout << city << endl;
-    }
-
     return 0;
 }
